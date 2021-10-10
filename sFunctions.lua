@@ -12,7 +12,7 @@ local Marker={
 	{-648.2,-2098,27,"cylinder",4,200,0,0,120,0,0},
 }
 local Blips={
-	--x,y,z,blipID
+	--x,y,z,blipID,blipSIZE,R,G,B
 	{-648.2,-2098,27,0,3,200,0,0},
 }
 
@@ -82,8 +82,7 @@ function farmApple(player)
 			AppleAmount=math.random(1,3);
 			
 			setPedAnimation(player,"BOMBER","BOM_Plant_Loop")
-			outputChatBox("Farmed",player,0,200,0);
-			givePlayerMoney(player,AppleAmount);
+			givePlayerMoney(player,AppleAmount);--change it to your variable
 			triggerClientEvent(player,"Render->Job->UI",player,"Apple",AppleAmount);
 		end,FarmTimer*1000,0);
 		FarmStatusTable[player]=true;
