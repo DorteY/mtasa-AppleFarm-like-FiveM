@@ -1,0 +1,6 @@
+<meta>
+	<info author="DORTEY#5702" type="script"/>
+	
+	<script src="cFunctions.lua" type="client" cache="false" />
+	<script src="sFunctions.lua" type="server" />
+</meta>
