@@ -23,7 +23,7 @@ local function startFarm(player)
 			AppleAmount=math.random(1,3);
 			
 			setPedAnimation(player,"BOMBER","BOM_Plant_Loop")
-			givePlayerMoney(player,AppleAmount);--change it to your variable
+			givePlayerMoney(player,AppleAmount);----change this to your  value example: setElementData(player,"Apple",getElementData(player,"Apple")+AppleAmount)
 			triggerClientEvent(player,"Render->Job->UI",player,"Apple",AppleAmount);
 		end,FarmTimer*1000,0);
 		FarmStatusTable[player]=true;
