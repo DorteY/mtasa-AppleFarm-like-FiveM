@@ -13,7 +13,7 @@ local Marker={
 }
 local Blips={
 	--x,y,z,blipID
-	{-648.2,-2098,27,12},
+	{-648.2,-2098,27,0,3,200,0,0},
 }
 
 addEventHandler("onResourceStart",resourceRoot,function()
@@ -55,7 +55,7 @@ addEventHandler("onResourceStart",resourceRoot,function()
 end)
 addEventHandler("onResourceStart",resourceRoot,function()
 	for i,v in ipairs(Blips)do
-		Blips[i]=createBlip(v[1],v[2],v[3],v[4]);
+		Blips[i]=createBlip(v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8]);
 	end
 end)
 
