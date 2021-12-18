@@ -16,26 +16,32 @@ local Blips={
 	{-648.2,-2098,27,0,3,200,0,0},
 }
 
-local function startFarm(player)
-	if(FarmStatusTable[player]==nil)then
-		outputChatBox("[JOB]: Press 'E' to stop farming!",player,0,200,0);
-		FarmTable[player]=setTimer(function()
-			AppleAmount=math.random(1,3);
-			
-			setPedAnimation(player,"BOMBER","BOM_Plant_Loop")
-			givePlayerMoney(player,AppleAmount);----change this to your  value example: setElementData(player,"Apple",getElementData(player,"Apple")+AppleAmount)
-			triggerClientEvent(player,"Render->Job->UI",player,"Apple",AppleAmount);
-		end,FarmTimer*1000,0);
-		FarmStatusTable[player]=true;
-		setElementFrozen(player,true);
-	elseif(FarmStatusTable[player]==true)then
-		outputChatBox("[JOB]: Farming stopped!",player,200,0,0);
-		setElementFrozen(player,false);
-		setPedAnimation(player);
-		if(isTimer(FarmTable[player]))then
-			killTimer(FarmTable[player]);
-			FarmTable[player]=nil;
-			FarmStatusTable[player]=nil;
+local function startFarm(elem)
+	if(elem and isElement(elem)and getElementType(elem)=="player")then
+		if(getElementDimension(elem)==0 and getElementInterior(elem)==0)then
+			if(FarmStatusTable[elem]==nil)then
+				outputChatBox("[JOB]: Press 'E' to stop farming!",elem,0,200,0);
+				FarmTable[elem]=setTimer(function()
+					if(getElementType(elem)=="player")then
+						AppleAmount=math.random(1,3);
+						
+						setPedAnimation(elem,"BOMBER","BOM_Plant_Loop")
+						givePlayerMoney(elem,AppleAmount);----change this to your  value example: setElementData(player,"Apple",getElementData(player,"Apple")+AppleAmount)
+						triggerClientEvent(elem,"Render->Job->UI",elem,"Apple",AppleAmount);
+					end
+				end,FarmTimer*1000,0);
+				FarmStatusTable[elem]=true;
+				setElementFrozen(elem,true);
+			elseif(FarmStatusTable[elem]==true)then
+				outputChatBox("[JOB]: Farming stopped!",elem,200,0,0);
+				setElementFrozen(elem,false);
+				setPedAnimation(elem);
+				if(isTimer(FarmTable[elem]))then
+					killTimer(FarmTable[elem]);
+					FarmTable[elem]=nil;
+					FarmStatusTable[elem]=nil;
+				end
+			end
 		end
 	end
 end
@@ -48,32 +54,34 @@ addEventHandler("onResourceStart",resourceRoot,function()
 		setElementInterior(Marker[i],v[10]);
 		setElementDimension(Marker[i],v[11]);
 		
-		addEventHandler("onMarkerHit",Marker[i],function(player,dim)
-			if(not(isPedInVehicle(player)))then
-				if(getElementInterior(player)==v[10] and getElementDimension(player)==v[11])then
-					outputChatBox("[JOB]: Press 'E' to farm Apple's",player,200,0,0);
-					if(isTimer(FarmTable[player]))then
-						killTimer(FarmTable[player]);
-						FarmTable[player]=nil;
-						FarmStatusTable[player]=nil;
-					end
-					setPedAnimation(player);
-					if(not isKeyBound(player,"E","down",startFarm))then
-						bindKey(player,"E","down",startFarm);
+		addEventHandler("onMarkerHit",Marker[i],function(elem,dim)
+			if(elem and isElement(elem)and getElementType(elem)=="player")then
+				if(not(isPedInVehicle(elem)))then
+					if(getElementInterior(elem)==v[10] and getElementDimension(elem)==v[11])then
+						outputChatBox("[JOB]: Press 'E' to farm Apple's",elem,200,0,0);
+						if(isTimer(FarmTable[elem]))then
+							killTimer(FarmTable[elem]);
+							FarmTable[elem]=nil;
+							FarmStatusTable[elem]=nil;
+						end
+						setPedAnimation(elem);
+						if(not isKeyBound(elem,"E","down",startFarm))then
+							bindKey(elem,"E","down",startFarm);
+						end
 					end
 				end
 			end
 		end)
-		addEventHandler("onMarkerLeave",Marker[i],function(player,dim)
-			if(isTimer(FarmTable[player]))then
-				killTimer(FarmTable[player]);
-				FarmTable[player]=nil;
-				FarmStatusTable[player]=nil;
-				outputChatBox("[JOB]: Farming stopped!",player,200,0,0);
+		addEventHandler("onMarkerLeave",Marker[i],function(elem,dim)
+			if(isTimer(FarmTable[elem]))then
+				killTimer(FarmTable[elem]);
+				FarmTable[elem]=nil;
+				FarmStatusTable[elem]=nil;
+				outputChatBox("[JOB]: Farming stopped!",elem,200,0,0);
 			end
-			setPedAnimation(player);
-			if(isKeyBound(player,"E","down",startFarm))then
-				unbindKey(player,"E","down",startFarm);
+			setPedAnimation(elem);
+			if(isKeyBound(elem,"E","down",startFarm))then
+				unbindKey(elem,"E","down",startFarm);
 			end
 		end)
 	end
